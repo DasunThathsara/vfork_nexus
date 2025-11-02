@@ -37,7 +37,6 @@ def function_word_ratio(words):
     return fw / len(words)
 
 def repetition_index(words, n=3):
-    # max frequency of any n-gram / total n-grams
     if len(words) < n: return 0.0
     from collections import Counter
     grams = [" ".join(words[i:i+n]) for i in range(len(words)-n+1)]
@@ -51,16 +50,16 @@ def extract_features(text: str) -> np.ndarray:
     sent_avg, sent_var = sent_lengths(s)
 
     features = [
-        shannon_entropy(s),                         # char_entropy
-        type_token_ratio(words),                    # ttr
-        hapax_ratio(words),                         # hapax
-        sent_avg,                                   # avg_sent_len
-        sent_var,                                   # var_sent_len
-        sum(1 for c in s if c in ".,;:!?")/chars,   # punct_rate
-        sum(1 for c in s if c.isdigit())/chars,     # digit_rate
-        len(_EMOJI.findall(s))/chars,               # emoji_rate
-        function_word_ratio(words),                 # function_word_ratio
-        repetition_index([w.lower() for w in words], n=3) # repetition_index
+        shannon_entropy(s),                         # 0 char_entropy
+        type_token_ratio(words),                    # 1 ttr
+        hapax_ratio(words),                         # 2 hapax
+        sent_avg,                                   # 3 avg_sent_len
+        sent_var,                                   # 4 var_sent_len
+        sum(1 for c in s if c in ".,;:!?")/chars,   # 5 punct_rate
+        sum(1 for c in s if c.isdigit())/chars,     # 6 digit_rate
+        len(_EMOJI.findall(s))/chars,               # 7 emoji_rate
+        function_word_ratio(words),                 # 8 function_word_ratio
+        repetition_index([w.lower() for w in words], n=3) # 9 repetition_index
     ]
     return np.array(features, dtype=float)
 
